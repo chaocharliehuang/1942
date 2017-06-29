@@ -4,10 +4,13 @@ var hero = {
 }
 
 var enemies = [
-    {x: 100, y: 100},
-    {x: 200, y: 100},
-    {x: 300, y: 100},
-    {x: 400, y: 100}
+    {x: 100, y: 0},
+    {x: 200, y: 0},
+    {x: 300, y: 0},
+    {x: 500, y: 100},
+    {x: 250, y: 100},
+    {x: 550, y: 150},
+    {x: 400, y: 0}
 ];
 
 var bullets = [];
@@ -64,9 +67,18 @@ function detectCollision() {
         for (var j = 0; j < enemies.length; j++) {
             if (Math.abs(bullets[i].x - enemies[j].x) < 10 && 
             Math.abs(bullets[i].y - enemies[j].y) < 10) {
-                console.log('collision!');
+                removeEnemy(j, enemies);
+                score += 10;
+                displayEnemies();
             }
         }
+    }
+}
+
+function removeEnemy(enemyIndex, enemies) {
+    for (var i = 0; i < enemies.length; i++) {
+        enemies[enemyIndex] = enemies[enemies.length - 1];
+        enemies.pop();
     }
 }
 
