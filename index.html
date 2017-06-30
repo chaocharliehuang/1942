@@ -5,6 +5,10 @@
 <style type="text/css">
 	body{
 		background-color:black;
+		color: white;
+	}
+	body a {
+		color: lime;
 	}
 	#container{
 		background: url('background.jpg');
@@ -18,7 +22,7 @@
 		height:28px;
 		position:absolute;
 	}
-	.enemy1{
+	.enemy1 {
 		background: url('1942.gif');
 		background-position: -30px -10px;
 		width:28px;
@@ -32,12 +36,20 @@
 		height:18px;
 		position:absolute;
 	}
+	.explosion {
+		background: url('explosion.gif ');
+		background-size: cover;
+		width: 28px;
+		height: 28px;
+		position: absolute;
+	}
 	#score{
 		position:absolute;
 		border:10px solid red;
 		top:20px;
 		left:800px;
 		background-color:white;
+		color: black;
 		padding:10px;
 		font-size:30px;
 		font-family: Arial;	
@@ -49,6 +61,7 @@
 		<div id='hero'></div>
 		<div id='enemies'></div>
 		<div id='bullets'></div>	
+		<div id='explosions'></div>
 	</div>
 
 	<div id='score'>0</div>

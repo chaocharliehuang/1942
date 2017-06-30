@@ -23,6 +23,8 @@ var bullets = [];
 
 var score = 0;
 
+var explosionID = 0;
+
 function displayScore() {
     $('#score').html(score);
 }
@@ -81,13 +83,17 @@ function detectCollision() {
         for (var j = 0; j < enemies.length; j++) {
             if (Math.abs(bullets[i].x - enemies[j].x) < 20 && 
             Math.abs(bullets[i].y - enemies[j].y) < 20) {
+                displayExplosion(enemies[j].x, enemies[j].y);
                 removeEnemy(j, enemies);
+                removeBullet(i, bullets);
                 score += 10;
                 displayScore();
                 displayEnemies();
+                displayBullets();
                 break;
             }
         }
+        break;
     }
     if (enemies.length === 0) {
         createEnemies();
@@ -100,7 +106,8 @@ function detectEnemyCollision() {
             Math.abs(hero.y - enemies[i].y) < 20) {
                 score -= 50;
                 displayScore();
-                hero.x = 200;
+                displayExplosion(hero.x, hero.y);
+                hero.x = 520;
                 hero.y = 520;
                 displayHero();
                 break;
@@ -108,9 +115,23 @@ function detectEnemyCollision() {
     }
 }
 
+function displayExplosion(x, y) {
+    var explosionHTML = "<div class='explosion' style='top:" + y + 
+        "px; left:" + x + "px;' id='explosion" + explosionID + "'></div>";
+    $('#explosions').append(explosionHTML);
+    var explosion = '#explosion' + explosionID;
+    $(explosion).fadeOut(300);
+    explosionID++;
+}
+
 function removeEnemy(enemyIndex, enemies) {
     enemies[enemyIndex] = enemies[enemies.length - 1];
     enemies.pop();
+}
+
+function removeBullet(bulletIndex, bullets) {
+    bullets[bulletIndex] = bullets[bullets.length - 1];
+    bullets.pop();
 }
 
 function gameLoop() {
@@ -120,6 +141,12 @@ function gameLoop() {
     moveBullets();
     detectCollision();
     detectEnemyCollision();
+    if (score < 0) {
+        var gameOverHTML = "<p>GAME OVER, YOU SUCK.</p>";
+        gameOverHTML += "<p>YOUR TERRIBLE SCORE: " + score + "</p>";
+        gameOverHTML += "<a href='./index.html'>TRY AGAIN, NOOB.</a>";
+        $('body').html(gameOverHTML);
+    }
 }
 
 setInterval(gameLoop, 20);
