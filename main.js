@@ -3,19 +3,29 @@ var hero = {
     y: 500
 }
 
-var enemies = [
-    {x: 100, y: 0},
-    {x: 200, y: 0},
-    {x: 300, y: 0},
-    {x: 500, y: 100},
-    {x: 250, y: 100},
-    {x: 550, y: 150},
-    {x: 400, y: 0}
-];
+var enemies = [];
+
+function createEnemies() {
+    enemies = [
+        {x: 100, y: 0},
+        {x: 200, y: 0},
+        {x: 300, y: 0},
+        {x: 500, y: 100},
+        {x: 250, y: 100},
+        {x: 550, y: 150},
+        {x: 400, y: 0}
+    ];
+}
+
+createEnemies();
 
 var bullets = [];
 
 var score = 0;
+
+function displayScore() {
+    $('#score').html(score);
+}
 
 function displayHero() {
     $('#hero').css('top', hero.y + "px");
@@ -42,7 +52,11 @@ function displayBullets() {
 
 function moveEnemies() {
     for (var i = 0; i < enemies.length; i++) {
-        enemies[i].y += 1;
+        if (score < 100) {
+            enemies[i].y += 1;
+        } else {
+            enemies[i].y += 1*(score/100);
+        }
         if (enemies[i].y > 540) {
             enemies[i].y = 0;
             enemies[i].x = Math.random()*500;
@@ -65,13 +79,17 @@ function moveBullets() {
 function detectCollision() {
     for (var i = 0; i < bullets.length; i++) {
         for (var j = 0; j < enemies.length; j++) {
-            if (Math.abs(bullets[i].x - enemies[j].x) < 10 && 
-            Math.abs(bullets[i].y - enemies[j].y) < 10) {
+            if (Math.abs(bullets[i].x - enemies[j].x) < 20 && 
+            Math.abs(bullets[i].y - enemies[j].y) < 20) {
                 removeEnemy(j, enemies);
                 score += 10;
+                displayScore();
                 displayEnemies();
             }
         }
+    }
+    if (enemies.length === 0) {
+        createEnemies();
     }
 }
 
