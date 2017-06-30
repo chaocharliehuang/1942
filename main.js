@@ -1,6 +1,6 @@
 var hero = {
     x: 300,
-    y: 500
+    y: 520
 }
 
 var enemies = [];
@@ -85,6 +85,7 @@ function detectCollision() {
                 score += 10;
                 displayScore();
                 displayEnemies();
+                break;
             }
         }
     }
@@ -93,11 +94,23 @@ function detectCollision() {
     }
 }
 
-function removeEnemy(enemyIndex, enemies) {
+function detectEnemyCollision() {
     for (var i = 0; i < enemies.length; i++) {
-        enemies[enemyIndex] = enemies[enemies.length - 1];
-        enemies.pop();
+        if (Math.abs(hero.x - enemies[i].x) < 20 && 
+            Math.abs(hero.y - enemies[i].y) < 20) {
+                score -= 50;
+                displayScore();
+                hero.x = 200;
+                hero.y = 520;
+                displayHero();
+                break;
+            }
     }
+}
+
+function removeEnemy(enemyIndex, enemies) {
+    enemies[enemyIndex] = enemies[enemies.length - 1];
+    enemies.pop();
 }
 
 function gameLoop() {
@@ -106,20 +119,21 @@ function gameLoop() {
     displayEnemies();
     moveBullets();
     detectCollision();
+    detectEnemyCollision();
 }
 
 setInterval(gameLoop, 20);
 
 $(document).keydown(function(e) {
-    if (e.keyCode === 37) {
+    if (e.keyCode === 37 && hero.x-10 > 0) { // left
         hero.x -= 10;
-    } else if (e.keyCode === 39) {
+    } else if (e.keyCode === 39 && hero.x+10 < 990) { // right
         hero.x += 10;
-    } else if (e.keyCode === 38) {
+    } else if (e.keyCode === 38 && hero.y-10 > 0) { // up
         hero.y -= 10;
-    } else if (e.keyCode === 40) {
+    } else if (e.keyCode === 40 && hero.y+10 < 540) { // down
         hero.y += 10;
-    } else if (e.keyCode === 32) {
+    } else if (e.keyCode === 32) { // spacebar
         bullets.push({x: hero.x+7, y: hero.y-15});
         displayBullets();
     }
